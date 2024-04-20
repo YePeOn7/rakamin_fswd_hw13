@@ -2,22 +2,37 @@ import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { BrowserRouter as Router, Routes, Route, useParams } from "react-router-dom";
-
+import { BrowserRouter as Router, Routes, Route, useParams, useNavigate } from "react-router-dom";
+import axios from "axios"
+import Register from "./pages/register"
+import Login from './pages/login';
+import PrivateRoute from './components/PrivateRoute';
 function Home() {
   const [data, setData] = useState({data:[], pageInfo:{}});
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate()
 
   useEffect(() => {
     async function fetchData(){
-      setLoading(true);
-      const data = await fetch("http://localhost:3000/api/users");
-      const json = await data.json();
-      setData(json);
-      setLoading(false);
-      
-      // console.log(typeof(json));
-      // console.log(json);
+      try{
+        setLoading(true);
+        const token = localStorage.getItem("token");
+        console.log(token);
+        const res = await axios.get("http://localhost:3000/api/users", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+  
+        if(res.status != 200){
+          navigate("/login")
+        }
+        // const json = await data.json();
+        setData(res.data);
+        setLoading(false);
+      } catch (e) {
+        navigate("/login");
+      }
     }
 
     fetchData();
@@ -102,6 +117,39 @@ function User() {
   )
 }
 
+function Upload() {
+  const [file, setFile] = useState(null);
+  return (
+    <div>
+      <h1>Upload</h1>
+      <input type="file" onChange={(e) => {
+        setFile(e.target.files[0]);
+      }} />
+      <button onClick={async () => {
+        try{
+          if(!file){
+            window.alert("Please select file");
+            return;
+          }
+          
+          const formData = new FormData();
+          formData.append('file', file);
+          const res = await axios.post("http://localhost:3000/api/movies/upload", formData, {
+            headers:{
+              'Content-Type': 'multipart/form-data'
+            }
+          });
+
+          console.log(res);
+          window.alert("Upload Success");
+        } catch (e){
+          window.alert("Something Wrong!!!");
+        }
+      }}>Upload</button>
+    </div>
+  )
+}
+
 function App() {
   const [count, setCount] = useState(0)
 
@@ -114,15 +162,23 @@ function App() {
           <li><a href="/contact">Contact</a></li>
           <li><a href="/dashboard">Dashboard</a></li>
           <li><a href="/users/Yohan">Users</a></li>
+          <li><a href="/register">Register</a></li>
+          <li><a href="/login">Login</a></li>
         </ul>
       </nav>
       <Routes>
-        <Route path="/" element={<Home />}/>
-        <Route path="/about" element={<About />}/>
-        <Route path="/contact" element={<Contact />}/>
-        <Route path="/dashboard" element={<Dashboard />}/>
-        <Route path="/dashboard/details" element={<DashboardDetails/>}/>
-        <Route path="/users/:userId" element={<User/>}/>
+
+        <Route path="/" element={<PrivateRoute/>}>
+          <Route path="/" element={<Home />}/>
+          <Route path="/about" element={<About />}/>
+          <Route path="/contact" element={<Contact />}/>
+          <Route path="/dashboard" element={<Dashboard />}/>
+          <Route path="/dashboard/details" element={<DashboardDetails/>}/>
+          <Route path="/users/:userId" element={<User/>}/>
+          <Route path='/upload' element={<Upload/>}/>
+        </Route>
+        <Route path='/register' element={<Register/>}/>
+        <Route path='/login' element={<Login/>}/>
       </Routes>
     </Router>
   )
