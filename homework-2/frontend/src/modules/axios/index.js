@@ -47,7 +47,18 @@ async function createBook(formData) {
 }
 
 async function getAllBooks() {
-
+    try {
+        const res = await axios.get(`${BASE_URL}/books`)
+        if (res.status === 200) {
+            return res.data;
+        }
+        else{
+            return null;
+        }
+    } catch (e) {
+        console.log("Error:", e)
+        return null;
+    }
 }
 
 async function editBook(id, title, author, publisher, year, pages) {

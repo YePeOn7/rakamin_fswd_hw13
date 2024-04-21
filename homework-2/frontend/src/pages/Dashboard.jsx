@@ -1,25 +1,26 @@
-import {Box, Container, Heading, SimpleGrid, Text} from "@chakra-ui/react"
-import { useState } from "react"
+import { Box, Container, Heading, SimpleGrid, Text } from "@chakra-ui/react"
+import { useEffect, useState } from "react"
+import * as axiosModule from "../modules/axios"
+import Books from "../components/Books"
 
-export default function Dashboard(){
-    return(
+export default function Dashboard() {
+    const [books, setBooks] = useState([])
+    useEffect(() => {
+        async function fetchBook() {
+            const res = await axiosModule.getAllBooks();
+            console.log(res.books);
+            setBooks(res.books);
+        }
+
+        fetchBook();
+    }, []);
+    return (
         <SimpleGrid p="10px" spacing={10} minChildWidth={250}>
-            <Box bg="white" height="200px" border="1px solid">
-                <Text>Hello</Text>
-            </Box>
-            <Box bg="white" height="200px" border="1px solid"></Box>
-            <Box bg="white" height="200px" border="1px solid"></Box>
-            <Box bg="white" height="200px" border="1px solid"></Box>
-
-            <Box bg="white" height="200px" border="1px solid"></Box>
-            <Box bg="white" height="200px" border="1px solid"></Box>
-            <Box bg="white" height="200px" border="1px solid"></Box>
-            <Box bg="white" height="200px" border="1px solid"></Box>
-
-            <Box bg="white" height="200px" border="1px solid"></Box>
-            <Box bg="white" height="200px" border="1px solid"></Box>
-            <Box bg="white" height="200px" border="1px solid"></Box>
-            <Box bg="white" height="200px" border="1px solid"></Box>
+            {
+                books.map((item) => (
+                    <Books key={item.id} {...item} />
+                ))
+            }
         </SimpleGrid>
     )
 }

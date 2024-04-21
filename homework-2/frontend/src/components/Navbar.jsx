@@ -8,10 +8,8 @@ export default function Navbar() {
 	const [ isLogedIn, setIsLogedIn ]= useState(false)
 	const [ email, setEmail ]= useState(null);
 	const navigate = useNavigate()
-	const a = "asdadad"
 
 	useEffect(()=>{
-		console.log("Here guys");
 		if(isTokenValid()) setIsLogedIn(true);
 		else setIsLogedIn(false);
 
