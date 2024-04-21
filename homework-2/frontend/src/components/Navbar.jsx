@@ -2,13 +2,15 @@ import { Box, Button, Flex, HStack, Heading, Spacer, Text, Avatar } from "@chakr
 import TabNav from "./TabNav";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { isTokenValid } from "../modules/tokenValidation";
 
 export default function Navbar() {
 	const [ isLogedIn, setIsLogedIn ]= useState(false)
 	const navigate = useNavigate()
 
 	useEffect(()=>{
-		if(localStorage.getItem("token")) setIsLogedIn(true);
+		console.log("Here guys");
+		if(isTokenValid()) setIsLogedIn(true);
 		else setIsLogedIn(false);
 	}, [])
 
@@ -17,7 +19,10 @@ export default function Navbar() {
 	}
 
 	function onLogoutClicked(){
-		window.alert("Logout Cuy");
+		console.log("here");
+		localStorage.removeItem("token");
+		localStorage.removeItem("userEmail");
+		setIsLogedIn(false);
 	}
 
 	return (

@@ -45,10 +45,10 @@ export default function Login() {
         const token = await axiosModule.login(email, password);
         if (token) {
             localStorage.setItem("token", token);
+            localStorage.setItem("userEmail", email);
             navigate("/");
         }
     }
-
 
 
     return (

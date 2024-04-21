@@ -1,24 +1,44 @@
 import axios from 'axios';
 
-const BASE_URL="http://localhost:8000"
+const BASE_URL = "http://localhost:8000"
 
 async function register(name, email, password) {
-
-}
-
-async function login(email, password) {
-    try{
-        const res = await axios.post(`${BASE_URL}/login`, {
-            email, 
+    try {
+        const res = await axios.post(`${BASE_URL}/register`, {
+            name,
+            email,
             password
         })
-        console.log(res.status)
-        if(res.status === 200){
+        if (res.status === 200) {
             console.log(res.data.token);
             return res.data.token;
         }
-    } catch(e){
+        else{
+            return null;
+        }
+    } catch (e) {
         console.log("Error:", e)
+        return null;
+    }
+}
+
+async function login(email, password) {
+    try {
+        const res = await axios.post(`${BASE_URL}/login`, {
+            email,
+            password
+        })
+        console.log(res.status)
+        if (res.status === 200) {
+            console.log(res.data.token);
+            return res.data.token;
+        }
+        else{
+            return null;
+        }
+    } catch (e) {
+        console.log("Error:", e)
+        return null;
     }
 }
 
