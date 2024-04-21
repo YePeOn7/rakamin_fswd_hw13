@@ -6,12 +6,18 @@ import { isTokenValid } from "../modules/tokenValidation";
 
 export default function Navbar() {
 	const [ isLogedIn, setIsLogedIn ]= useState(false)
+	const [ email, setEmail ]= useState(null);
 	const navigate = useNavigate()
+	const a = "asdadad"
 
 	useEffect(()=>{
 		console.log("Here guys");
 		if(isTokenValid()) setIsLogedIn(true);
 		else setIsLogedIn(false);
+
+		const email = localStorage.getItem("userEmail");
+		setEmail(email);
+
 	}, [])
 
 	function onLoginClicked(){
@@ -36,7 +42,7 @@ export default function Navbar() {
 					isLogedIn && 
 					<>
 						<Avatar bg="yellow.500" />
-						<Text>yohan@gmail.com</Text>
+						<Text>{email}</Text>
 					</>
 				}
 				<Button colorScheme="yellow" onClick={isLogedIn?onLogoutClicked:onLoginClicked}>{isLogedIn? "Logout" : "Login"}</Button>
