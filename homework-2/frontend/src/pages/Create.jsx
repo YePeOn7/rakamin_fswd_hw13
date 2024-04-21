@@ -18,7 +18,7 @@ import { useState } from "react";
 import { FaUserAlt, FaLock, FaBookOpen, FaPenFancy } from "react-icons/fa";
 import { MdAlternateEmail } from "react-icons/md";
 import { BsCalendar2Date } from "react-icons/bs";
-import { GiBookPile } from "react-icons/gi"; 
+import { GiBookPile } from "react-icons/gi";
 
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
