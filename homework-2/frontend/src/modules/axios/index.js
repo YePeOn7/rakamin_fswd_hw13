@@ -94,7 +94,24 @@ async function getBookDetail(id) {
 
 
 async function deleteBook(id) {
-    console.log("delete book");
+    console.log(`delete book: ${id}`);
+    try {
+        const token = localStorage.getItem("token");
+        const res = await axios.delete(`${BASE_URL}/books/${id}`, {
+            headers:{
+                Authorization: `Bearer ${token}`
+            }
+        })
+        if (res.status === 200) {
+            return res.data;
+        }
+        else {
+            return null;
+        }
+    } catch (e) {
+        console.log("Error:", e)
+        return null;
+    }
 }
 
 export {
