@@ -6,6 +6,7 @@ import RoootLayout from "./layouts/RootLayout";
 import Dashboard from "./pages/Dashboard";
 import Create from "./pages/Create";
 import Register from "./pages/Register";
+import BookDetails from "./pages/BooksDetail";
 
 function App() {
     return (
@@ -16,6 +17,7 @@ function App() {
                     <Route path="create" element={<Create />} />
                     <Route path="register" element={<Register />} />
                     <Route path="login" element={<Login />} />
+                    <Route path={"/books/:id"} element={<BookDetails />} />
                 </Route>
             </Routes>
         </Router>

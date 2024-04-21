@@ -13,7 +13,7 @@ async function register(name, email, password) {
             console.log(res.data.token);
             return res.data.token;
         }
-        else{
+        else {
             return null;
         }
     } catch (e) {
@@ -33,7 +33,7 @@ async function login(email, password) {
             console.log(res.data.token);
             return res.data.token;
         }
-        else{
+        else {
             return null;
         }
     } catch (e) {
@@ -43,7 +43,18 @@ async function login(email, password) {
 }
 
 async function createBook(formData) {
-
+    try {
+        const token = localStorage.getItem("token");
+        const response = await axios.post(`${BASE_URL}/books`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        return null;
+    }
 }
 
 async function getAllBooks() {
@@ -52,7 +63,7 @@ async function getAllBooks() {
         if (res.status === 200) {
             return res.data;
         }
-        else{
+        else {
             return null;
         }
     } catch (e) {
@@ -65,8 +76,25 @@ async function editBook(id, title, author, publisher, year, pages) {
 
 }
 
-async function deleteBook(id) {
+async function getBookDetail(id) {
+    console.log(`get book detail of id ${id}`);
+    try {
+        const res = await axios.get(`${BASE_URL}/books/${id}`)
+        if (res.status === 200) {
+            return res.data;
+        }
+        else {
+            return null;
+        }
+    } catch (e) {
+        console.log("Error:", e)
+        return null;
+    }
+}
 
+
+async function deleteBook(id) {
+    console.log("delete book");
 }
 
 export {
@@ -75,5 +103,6 @@ export {
     createBook,
     getAllBooks,
     editBook,
-    deleteBook
+    deleteBook,
+    getBookDetail
 }
