@@ -14,16 +14,43 @@ import {
     FormHelperText,
     InputRightElement
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"
 import { FaUserAlt, FaLock } from "react-icons/fa";
+import * as axiosModule from "../modules/axios";
+import { isTokenValid } from "../modules/tokenValidation";
 
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
 
-    const handleShowClick = () => setShowPassword(!showPassword);
+    useEffect(() => {
+        if(isTokenValid()){
+            navigate("/");
+        }
+    })
+
+    function handleShowClick() {
+        setShowPassword(!showPassword);
+    }
+
+    async function handleSubmit(e) {
+        e.preventDefault()
+
+        const email = e.target.email.value
+        const password = e.target.password.value
+        const token = await axiosModule.login(email, password);
+        if (token) {
+            localStorage.setItem("token", token);
+            navigate("/");
+        }
+    }
+
+
+
     return (
         <Flex
             flexDirection="column"
@@ -42,7 +69,7 @@ export default function Login() {
                 <Avatar bg="yellow.500" />
                 <Heading>Welcome</Heading>
                 <Box minW={{ base: "90%", md: "468px" }}>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <Stack
                             spacing={4}
                             p="1rem"
@@ -56,7 +83,7 @@ export default function Login() {
                                         pointerEvents="none"
                                         children={<CFaUserAlt color="gray.300" />}
                                     />
-                                    <Input type="email" placeholder="email address" />
+                                    <Input type="email" placeholder="email address" name="email" />
                                 </InputGroup>
                             </FormControl>
                             <FormControl>
@@ -69,6 +96,7 @@ export default function Login() {
                                     <Input
                                         type={showPassword ? "text" : "password"}
                                         placeholder="Password"
+                                        name="password"
                                     />
                                     <InputRightElement width="4.5rem">
                                         <Button h="1.75rem" size="sm" onClick={handleShowClick}>
@@ -92,7 +120,7 @@ export default function Login() {
             </Stack>
             <Box>
                 {"Don't have account? "}
-                <Link color="yellow.500" href="#">
+                <Link color="yellow.500" href="/register">
                     Register
                 </Link>
             </Box>
