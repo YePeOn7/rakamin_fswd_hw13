@@ -42,8 +42,7 @@ const Navbar = () => {
       justify="space-between"
       wrap="wrap"
       padding="1rem"
-      bg="teal.500"
-      color="white"
+      bg="yellow"
     >
       <Link to="/">
         <Flex align="center" mr={5} cursor="pointer">
@@ -59,12 +58,12 @@ const Navbar = () => {
           </Link>
         )}
         {!isLogin ? (
-          <Button onClick={onOpen} colorScheme="blue">
+          <Button onClick={onOpen} colorScheme="yellow">
             Login
           </Button>
         ) : (
           <Button
-            colorScheme="blue"
+            colorScheme="yellow"
             onClick={() => {
               window.localStorage.removeItem("token");
               setIsLogin(false);
