@@ -34,35 +34,66 @@ const CGiBookPile = chakra(GiBookPile)
 export default function EditBookPage() {
     const { id } = useParams();
     const [book, setBook] = useState(null);
+    const [formData, setFormData] = useState({
+        title: '',
+        author: '',
+        publisher: '',
+        year: '',
+        pages: ''
+    });
 
     useEffect(() => {
         const fetchBook = async () => {
             try {
                 const response = await axiosModule.getBookDetail(id);
                 setBook(response.book);
-                console.log(response.book);
+                
+                const {title, author, publisher, year, pages} = response.book;
+
+                setFormData({
+                    title: title || '',
+                    author: author || '',
+                    publisher: publisher || '',
+                    year: year || '',
+                    pages: pages || ''
+                })
+                // console.log(response.book);
             } catch (e) {
                 console.log(e);
             }
         };
         fetchBook();
+        
     }, [id]);
 
     function handleSubmit(e) {
         async function edit(e){
             e.preventDefault();
     
-            const title = e.target.title.value;
-            const author = e.target.author.value;
-            const publisher = e.target.publisher.value;
-            const year = e.target.year.value;
-            const pages = e.target.pages.value;
+            const title = formData.title.value;
+            const author = formData.author.value;
+            const publisher = formData.publisher.value;
+            const year = formData.year.value;
+            const pages = formData.pages.value;
             const res = await axiosModule.editBook(id, title, author, publisher, year, pages)
             console.log(res);
+
+            if(res){
+                window.alert("Success");
+            }
         }
 
         edit(e);
 
+    }
+
+    function handleInputChange(e) {
+        const {name, value} = e.target
+        console.log(name, value);
+        setFormData({
+            ...formData,
+            [name]: value //name need to use [], so it will modify the object property of which inside the name instead of use "name" as literal string
+        })
     }
 
     return (
@@ -97,7 +128,7 @@ export default function EditBookPage() {
                                         pointerEvents="none"
                                         children={<CFaBookOpen color="gray.300" />}
                                     />
-                                    <Input type="text" placeholder="Title" name="title" value={book.title}/>
+                                    <Input type="text" placeholder="Title" name="title" value={formData.title} onChange={handleInputChange}/>
                                 </InputGroup>
                             </FormControl>
                             <FormControl>
@@ -106,7 +137,7 @@ export default function EditBookPage() {
                                         pointerEvents="none"
                                         children={<CFaPenFancy color="gray.300" />}
                                     />
-                                    <Input type="text" placeholder="Author" name="author" value={book.author}/>
+                                    <Input type="text" placeholder="Author" name="author" value={formData.author} onChange={handleInputChange}/>
                                 </InputGroup>
                             </FormControl>
                             <FormControl>
@@ -115,7 +146,7 @@ export default function EditBookPage() {
                                         pointerEvents="none"
                                         children={<CFaPenFancy color="gray.300" />}
                                     />
-                                    <Input type="text" placeholder="Publisher" name="publisher" value={book.publisher}/>
+                                    <Input type="text" placeholder="Publisher" name="publisher" value={formData.publisher} onChange={handleInputChange}/>
                                 </InputGroup>
                             </FormControl>
                             <FormControl>
@@ -124,7 +155,7 @@ export default function EditBookPage() {
                                         pointerEvents="none"
                                         children={<CBsCalendar2Date color="gray.300" />}
                                     />
-                                    <Input type="text" placeholder="Year" name="year" value={book.year}/>
+                                    <Input type="text" placeholder="Year" name="year" value={formData.year} onChange={handleInputChange}/>
                                 </InputGroup>
                             </FormControl>
                             <FormControl>
@@ -133,7 +164,7 @@ export default function EditBookPage() {
                                         pointerEvents="none"
                                         children={<CGiBookPile color="gray.300" />}
                                     />
-                                    <Input type="text" placeholder="Page" name="pages" value={book.pages}/>
+                                    <Input type="text" placeholder="Page" name="pages" value={formData.pages} onChange={handleInputChange}/>
                                 </InputGroup>
                             </FormControl>
                             <Button

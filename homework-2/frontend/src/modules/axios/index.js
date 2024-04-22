@@ -102,7 +102,6 @@ async function editBook(id, title, author, publisher, year, pages) {
 }
 
 async function getBookDetail(id) {
-    console.log(`get book detail of id ${id}`);
     try {
         const res = await axios.get(`${BASE_URL}/books/${id}`)
         if (res.status === 200) {
@@ -119,7 +118,6 @@ async function getBookDetail(id) {
 
 
 async function deleteBook(id) {
-    console.log(`delete book: ${id}`);
     try {
         const token = localStorage.getItem("token");
         const res = await axios.delete(`${BASE_URL}/books/${id}`, {

@@ -20,6 +20,7 @@ import { MdAlternateEmail } from "react-icons/md";
 import { BsCalendar2Date } from "react-icons/bs";
 import { GiBookPile } from "react-icons/gi";
 import * as axiosModule from "../modules/axios"
+import { useNavigate } from "react-router-dom";
 
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
@@ -33,6 +34,7 @@ const CGiBookPile = chakra(GiBookPile)
 export default function Create() {
     const [file, setFile] = useState(null);
     const [formData, setFormData] = useState(null);
+    const navigate = useNavigate();
 
     const handleShowClick = () => setShowPassword(!showPassword);
     
@@ -48,7 +50,7 @@ export default function Create() {
             window.alert("please select file");
         }
 
-        console.log(e.target.title.value)
+        // console.log(e.target.title.value)
         const formData = new FormData();
         formData.append('title', e.target.title.value);
         formData.append('author', e.target.author.value);
@@ -58,7 +60,10 @@ export default function Create() {
         formData.append('image', e.target.file.files[0]);
         const res = await axiosModule.createBook(formData);
 
-        // console.log(res);
+        if(res){
+            window.alert("Book successfully added");
+            navigate("/");
+        }
     }
     
     return (
