@@ -15,7 +15,7 @@ import {
     InputRightElement
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as axiosModule from "../modules/axios"
 
 import { FaUserAlt, FaLock, FaBookOpen, FaPenFancy } from "react-icons/fa";
@@ -32,6 +32,7 @@ const CBsCalendar2Date = chakra(BsCalendar2Date)
 const CGiBookPile = chakra(GiBookPile)
 
 export default function EditBookPage() {
+    const navigate = useNavigate();
     const { id } = useParams();
     const [book, setBook] = useState(null);
     const [formData, setFormData] = useState({
@@ -70,16 +71,17 @@ export default function EditBookPage() {
         async function edit(e){
             e.preventDefault();
     
-            const title = formData.title.value;
-            const author = formData.author.value;
-            const publisher = formData.publisher.value;
-            const year = formData.year.value;
-            const pages = formData.pages.value;
+            const title = formData.title;
+            const author = formData.author;
+            const publisher = formData.publisher;
+            const year = formData.year;
+            const pages = formData.pages;
+
             const res = await axiosModule.editBook(id, title, author, publisher, year, pages)
-            console.log(res);
 
             if(res){
                 window.alert("Success");
+                navigate("/");
             }
         }
 
@@ -89,7 +91,6 @@ export default function EditBookPage() {
 
     function handleInputChange(e) {
         const {name, value} = e.target
-        console.log(name, value);
         setFormData({
             ...formData,
             [name]: value //name need to use [], so it will modify the object property of which inside the name instead of use "name" as literal string

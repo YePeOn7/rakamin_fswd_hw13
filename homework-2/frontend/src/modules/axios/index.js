@@ -76,7 +76,6 @@ async function editBook(id, title, author, publisher, year, pages) {
     try {
         const token = localStorage.getItem("token");
         const requestBody = {
-            id,
             title,
             author,
             publisher,
@@ -89,7 +88,6 @@ async function editBook(id, title, author, publisher, year, pages) {
             }
         })
         if (res.status === 200) {
-            console.log(res.data);
             return res.data;
         }
         else {

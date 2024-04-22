@@ -8,7 +8,6 @@ export default function Dashboard() {
     useEffect(() => {
         async function fetchBook() {
             const res = await axiosModule.getAllBooks();
-            console.log(res.books);
             setBooks(res.books);
         }
 
