@@ -1,8 +1,8 @@
-import { VStack } from "@chakra-ui/react";
+import { SimpleGrid, Container } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Books from "../components/Books";
 import { getAllBooks } from "../modules/fetch";
- 
+
 
 
 export default function Homepage() {
@@ -16,10 +16,12 @@ export default function Homepage() {
   }, []);
 
   return (
-    <VStack w="100vw">
-      {books?.books?.map((book) => (
-        <Books key={`${book.id} ${book.title}`} {...book} />
-      ))}
-    </VStack>
+    <Container minWidth="100wh" maxW="100wh" p="0px">
+      <SimpleGrid p="10px" spacing={10} minChildWidth={200}>
+        {books?.books?.map((book) => (
+          <Books key={`${book.id} ${book.title}`} {...book} />
+        ))}
+      </SimpleGrid>
+    </Container>
   );
 }
