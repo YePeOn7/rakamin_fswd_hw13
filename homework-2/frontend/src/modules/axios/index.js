@@ -73,7 +73,32 @@ async function getAllBooks() {
 }
 
 async function editBook(id, title, author, publisher, year, pages) {
-
+    try {
+        const token = localStorage.getItem("token");
+        const requestBody = {
+            id,
+            title,
+            author,
+            publisher,
+            year,
+            pages
+          };
+        const res = await axios.put(`${BASE_URL}/books/${id}`, requestBody, {
+            headers:{
+                Authorization: `Bearer ${token}`
+            }
+        })
+        if (res.status === 200) {
+            console.log(res.data);
+            return res.data;
+        }
+        else {
+            return null;
+        }
+    } catch (e) {
+        console.log("Error:", e)
+        return null;
+    }
 }
 
 async function getBookDetail(id) {

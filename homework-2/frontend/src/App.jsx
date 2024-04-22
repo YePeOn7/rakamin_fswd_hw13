@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import Create from "./pages/Create";
 import Register from "./pages/Register";
 import BookDetails from "./pages/BooksDetail";
+import EditBookPage from "./pages/Editbook";
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                     <Route path="register" element={<Register />} />
                     <Route path="login" element={<Login />} />
                     <Route path={"/books/:id"} element={<BookDetails />} />
+                    <Route path={"/editbook/:id"} element={<EditBookPage />} />
                 </Route>
             </Routes>
         </Router>
